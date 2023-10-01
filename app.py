@@ -369,9 +369,8 @@ elif add_sidebar == sidebar_options[1]:
 
     '''
     -----------------------------------------
-    以上資料來源為：https://member.jcic.org.tw/main_member/MorgageQuery.aspx。
-    整個網頁app是使用python的streamlit套件來搭建，
-    資料抓取工具是python的selenium套件，
-    資料繪圖套件是使用python的plotly，
+    以上資料來源為：財團法人聯合徵信中心住宅貸款統計查詢網（ https://member.jcic.org.tw/main_member/MorgageQuery.aspx ）。
+    透過python的selenium套件來抓取資料，資料繪圖套件主要使用python的plotly套件，
     其中長條圖動畫則是運用raceplotly套件的程式再自行做了一些微調。
+    整個網頁app則是使用python的streamlit套件來搭建。
     '''
