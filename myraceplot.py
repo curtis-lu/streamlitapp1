@@ -57,15 +57,11 @@ class barplot(object):
 
         if (item_label is not None) or (value_label is not None):
             if orientation == 'horizontal':
-                self.fig.update_xaxes(title_text= value_label,
-                        visible = True, showticklabels= True)
-                self.fig.update_yaxes(title_text= item_label,
-                        visible = True, showticklabels= False)
+                self.fig.update_xaxes(title_text=value_label, visible=True, showticklabels= True)
+                self.fig.update_yaxes(title_text=item_label, visible=True, showticklabels= False)
             else:
-                self.fig.update_xaxes(title_text= item_label,
-                        visible = True, showticklabels= False)
-                self.fig.update_yaxes(title_text= value_label,
-                        visible = True, showticklabels= True)
+                self.fig.update_xaxes(title_text=item_label, visible=True, showticklabels= False)
+                self.fig.update_yaxes(title_text=value_label, visible=True, showticklabels= True)
 
         self.fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = frame_duration
         self.fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = frame_duration
@@ -111,7 +107,7 @@ class barplot(object):
                             y=snap_data[y],
                             marker_color=snap_data['color'],
                             cliponaxis=False,
-                            hoverinfo='all',
+                            hoverinfo='text',
                             hovertemplate = '<extra></extra>', #annoying and obscure, see docs
                             ## (https://community.plotly.com/t/remove-trace-0-next-to-hover/33731)
                             textposition='outside',
@@ -192,7 +188,8 @@ class barplot(object):
                     x=frame1[x],
                     y=frame1[y],
                     marker_color=frame1['color'],
-                    hoverinfo='all',
+                    hoverinfo='text',
+                    hovertemplate = '<extra></extra>',
                     textposition='outside',
                     texttemplate='%{x}: %{y:.2s}' if self.orientation == 'vertical' else '%{y}: %{x:.2s}',
                     textangle= 0,
