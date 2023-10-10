@@ -73,7 +73,13 @@ if add_sidebar == sidebar_options[0]:
                      animation_group="county",
                      category_orders={'district': ['北部區域', '中部區域','南部區域', '東部區域']})
 
-    fig.update_traces(textposition="top center")
+
+    CUSTOM_HOVERTEMPLATE = "縣市名稱: %{text} <br> 平均屋齡: %{x} <br> 平均單價: %{y}"
+    fig.update_traces(textposition="top center", hovertemplate=CUSTOM_HOVERTEMPLATE)
+    for frame in fig.frames:
+        for data in frame.data:
+            data.hovertemplate = CUSTOM_HOVERTEMPLATE
+
     fig.update_xaxes(title="住宅買賣平均屋齡", range=[5, 35])
     fig.update_yaxes(title="買賣契約平均單價", visible=True, showticklabels=True, range=[5, 75])
     fig.update_layout(title=title,
@@ -94,7 +100,9 @@ if add_sidebar == sidebar_options[0]:
     '''
 
     下圖比較了「各地區」與「全國平均」的屋齡增率，數值呈現的是各地區與全國平均的差異。
-    根據資料計算，全國平均住宅買賣平均屋齡在2011年Q1時為15.34年，在2023年Q2為28.13年，約增加了83%。
+
+    根據資料計算，**全國平均住宅買賣平均屋齡**在2011年Q1時為15.34年，在2023年Q2為28.13年，約增加了83%。
+
     而新竹縣住宅買賣平均屋齡在2011年時為7.45年，在2023年為20.44年，約增加了174%之多！
 
     **紅色代表的是屋齡增率高於全國平均，藍色則是低於全國平均。**
@@ -109,7 +117,9 @@ if add_sidebar == sidebar_options[0]:
     trace = go.Bar(x=df_hage_versus['hage_diff'],
                    y=df_hage_versus['county'],
                    marker=dict(color=df_hage_versus['hage_color']),
-                   orientation='h')
+                   orientation='h',
+                   hovertemplate='<b>%{y}</b>屋齡增率 - 全國屋齡增率 = %{x:.2f}',
+                   name="")
     fig.add_trace(trace)
     fig.update_layout(title=title,
                       width=780,
@@ -118,14 +128,15 @@ if add_sidebar == sidebar_options[0]:
     st.plotly_chart(fig)
 
     '''
-    依同樣邏輯來看，
+    依同樣邏輯來看，下圖呈現的是各縣市的房價增率與全國房價增率的差異，
 
-    下圖呈現的是各縣市的房價增率與全國房價增率的差異，
-    全國買賣契約平均單價在2011年Q1時為20.75萬/坪，在2023年Q2為32.14年，約增加了55%。
+    **全國買賣契約平均單價**在2011年Q1時為20.75萬/坪，在2023年Q2為32.14年，約增加了55%。
+
     至於房價居高不下的台北市，買賣契約平均單價在2011年時為52.27萬/坪，在2023年為67.91萬/坪，約增加了30%。
 
     **紅色代表的是房價增率高於全國平均，藍色則是低於全國平均。**
     以台北市來看，買賣契約單價增率30%低於全國平均的55%，約25%。
+
     全臺僅有台北市的房屋單價增率低於全國平均，反映的是台北市的房價基期相較其他地區高上許多（看看第一張泡泡圖中高處不勝寒的台北市！）。
     '''
     title="各縣市買賣契約單價增率與全國平均之差異（2023年 / 2011年）<br>全國平均買賣契約單價增率：55%"
@@ -136,7 +147,9 @@ if add_sidebar == sidebar_options[0]:
     trace = go.Bar(x=df_hage_versus['price_diff'],
                    y=df_hage_versus['county'],
                    marker=dict(color=df_hage_versus['price_color']),
-                   orientation='h')
+                   orientation='h',
+                   hovertemplate='<b>%{y}</b>單價增率 - 全國單價增率 = %{x:.2f}',
+                   name="")
     fig.add_trace(trace)
     fig.update_layout(title=title,
                       width=780,
@@ -172,7 +185,7 @@ elif add_sidebar == sidebar_options[1]:
 
     '''
     根據聯徵中心網站的公開資料，抓取各年齡層購屋貸款資料。
-    利用這份資料，繪製了自2009年Ｑ1以來，每一季申辦房貸案件的年齡分布。結果如下：\n
+    利用這份資料，繪製了自2009年Q1以來，每一季申辦房貸案件的年齡分布。可以觀察到：\n
 
     * 2009Q1時，申辦房貸最多的年齡層是30至35歲，其次是35至40歲。反應多數人成家立業的年齡。\n
     * 但是來到2023Q1，年齡層30至35歲落到了第3名，第1名則是40至45歲。似乎反應年輕人越來越晚才能有錢買房。\n
@@ -278,12 +291,14 @@ elif add_sidebar == sidebar_options[1]:
 
     '''
     更細部來看，我把**30至35歲**每期申辦房貸件數當作基準，拿**35至40歲**, **40至45歲**, 以及**45至50歲**等3群人做比較。
-    用30至35歲的申辦件數當作分母，其他年齡層的申辦件數當作分子，分別繪製折線圖如下。
+    **用30至35歲的申辦件數當作分母**，**其他年齡層的申辦件數當作分子**，分別繪製折線圖如下。
+
     由圖可以看到，在2009年Q1時，35至40歲, 以及40至45歲的客群，比值都小於1，分別是0.94與0.86，代表原本申辦房貸件數都比30至35歲的客群少。
-    但到了2023年Q1時，比值都大於1，分別是1.12與1.13，代表申辦件數變得比30至35歲的客群來得多了，而且多出了約12%~13%左右！
+
+    但到了2023年Q1時，比值都大於1，分別是1.12與1.13，**代表申辦件數變得比30至35歲的客群來得多了，而且多出了約12%~13%左右！**
     '''
     ###############################################
-    title = '各年齡層申請房貸件數 / 30~35歲申請房貸件數'
+    title = '各年齡層申請房貸件數 ÷ 30~35歲申請房貸件數  (單位：比值)'
 
     merged_df = (df[['date_fmt', 'age_group', 'cnt']]
                 .merge(df.query('age_group=="30_35"')[['date_fmt', 'cnt']], on='date_fmt')
@@ -370,8 +385,9 @@ elif add_sidebar == sidebar_options[1]:
 
     '''
     -----------------------------------------
-    以上資料來源為：財團法人聯合徵信中心住宅貸款統計查詢網（ https://member.jcic.org.tw/main_member/MorgageQuery.aspx ）。
-    透過python的selenium套件來抓取資料，資料繪圖套件主要使用python的plotly套件，
-    其中長條圖動畫則是運用raceplotly套件的程式再自行做了一些微調。
-    整個網頁app則是使用python的streamlit套件來搭建。
+    資料來源：聯徵中心住宅貸款統計查詢網( https://member.jcic.org.tw )。
+
+    * 透過python的selenium套件來抓取資料。
+    * 資料繪圖套件主要使用python的plotly套件，其中長條圖動畫則是運用raceplotly套件的程式再自行做了一些微調。
+    * 整個網頁app則是使用python的streamlit套件來搭建。
     '''
